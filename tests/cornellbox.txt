@@ -1,0 +1,48 @@
+### Global Settings ###
+size 640 480
+recursion_depth_limit 5
+enable_shadows 1
+
+### Color Definitions ###
+color red 0.75 0.1 0.1
+color green 0.1 0.75 0.1
+color white 0.75 0.75 0.75
+color light_color 1 1 1
+
+### Shaders ###
+# Standard matte shaders for the walls
+phong_shader red_wall red red white 10
+phong_shader green_wall green green white 10
+phong_shader white_wall white white white 10
+
+# A mirror-like reflective shader for one of the spheres
+reflective_shader mirror white_wall 0.8
+phong_shader matte_sphere white white white 50
+
+### Geometry: The Box ###
+# Left Wall (Red)
+plane -1 0 0 1 0 0 red_wall
+# Right Wall (Green)
+plane 1 0 0 -1 0 0 green_wall
+# Floor (White)
+plane 0 -1 0 0 1 0 white_wall
+# Ceiling (White)
+plane 0 1 0 0 -1 0 white_wall
+# Back Wall (White)
+plane 0 0 -1 0 0 1 white_wall
+
+### Geometry: Inner Objects ###
+# Large reflective sphere on the left
+sphere -0.4 -0.6 -0.3 0.4 mirror
+# Small matte sphere on the right
+sphere 0.3 -0.7 0.2 0.3 matte_sphere
+
+### Lighting ###
+# Point light placed near the ceiling
+point_light 0 0.9 0 light_color 1.5
+ambient_light white 0.1
+
+### Camera ###
+# Positioned at (0, 0, 3.5), looking at the center of the box
+# px py pz | lookatX lookatY lookatZ | upX upY upZ | fov
+camera 0 0 3.5 0 0 0 0 1 0 45
