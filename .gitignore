@@ -12,3 +12,5 @@ grading
 .sconsign.dblite
 config.log
 .sconf_temp
+
+.DS_Store
