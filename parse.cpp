@@ -7,6 +7,7 @@
 #include "plane.h"
 #include "point_light.h"
 #include "reflective_shader.h"
+#include "glass_shader.h"
 #include "render_world.h"
 #include "sphere.h"
 #include <map>
@@ -25,7 +26,7 @@ void Parse(Render_World& world,int& width,int& height,const char* test_file)
         exit(EXIT_FAILURE);
     }
 
-    double f0;
+    double f0, f1;
     char buff[1000];
     vec3 u,v,w;
     std::string s0,s1,s2,mat;
@@ -105,6 +106,15 @@ void Parse(Render_World& world,int& width,int& height,const char* test_file)
             std::map<std::string,Shader*>::const_iterator sh=shaders.find(s0);
             assert(sh!=shaders.end());
             shaders[name]=new Reflective_Shader(world,sh->second,f0);
+        }
+        else if(item=="glass_shader") // <--- NEW LOGIC HERE
+        {
+            // Format: glass_shader [name] [color] [ior] [roughness]
+            ss >> name >> s0 >> f0 >> f1;
+            assert(ss);
+            auto c0 = colors.find(s0);
+            assert(c0 != colors.end());
+            shaders[name] = new Glass_Shader(world, f0, f1, c0->second);
         }
         else if(item=="point_light")
         {

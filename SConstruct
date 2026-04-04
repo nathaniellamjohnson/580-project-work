@@ -9,6 +9,6 @@ env.Program("ray_tracer",
                 "camera.cpp","hierarchy.cpp",
                 "flat_shader.cpp","main.cpp","parse.cpp",
                 "phong_shader.cpp","plane.cpp","reflective_shader.cpp",
-                "render_world.cpp","sphere.cpp","box.cpp","mesh.cpp"
+                "render_world.cpp","sphere.cpp","box.cpp","mesh.cpp", "glass_shader.cpp"
             ])
 

@@ -1,0 +1,47 @@
+### Global Settings ###
+# size 640 480
+size 1920 1080
+recursion_depth_limit 10
+enable_shadows 1
+
+### Color Definitions ###
+color red 0.75 0.1 0.1
+color green 0.1 0.75 0.1
+color blue 0.1 0.1 0.75
+color white 0.75 0.75 0.75
+color gold 0.8 0.6 0.2
+color glass_tint 0.9 0.9 1.0
+color light_color 1 1 1
+
+### Shaders ###
+phong_shader red_wall red red white 10
+phong_shader green_wall green green white 10
+phong_shader blue_wall blue blue white 10
+phong_shader white_wall white white white 10
+phong_shader teapot_gold gold gold white 50
+
+# Left sphere: Mirror
+reflective_shader mirror white_wall 0.8
+
+# Right sphere: NOW GLASS (Parameters: name color IOR roughness)
+glass_shader glass_mat glass_tint 1.5 0.0
+
+### Geometry ###
+plane -1 0 0 1 0 0 red_wall
+plane 1 0 0 -1 0 0 green_wall
+plane 0 -1 0 0 1 0 white_wall
+plane 0 1 0 0 -1 0 white_wall
+plane 0 0 -2 0 0 1 blue_wall
+
+# Large reflective sphere
+sphere -0.4 -0.6 -0.3 0.4 mirror
+
+# Small glass sphere (Replaced matte_sphere with glass_mat)
+sphere 0.3 -0.7 0.2 0.3 glass_mat
+
+### Lighting ###
+point_light 0 0.9 0 light_color 10.5
+ambient_light white 0.1
+
+### Camera ###
+camera 0 0 3.5 0 0 0 0 1 0 45

@@ -1,0 +1,48 @@
+### Global Settings ###
+size 640 480
+recursion_depth_limit 10
+enable_shadows 1
+
+### Color Definitions ###
+color red 0.75 0.1 0.1
+color green 0.1 0.75 0.1
+color blue 0.1 0.1 0.75
+color white 0.75 0.75 0.75
+color gold 0.8 0.6 0.2
+color glass_tint 0.9 0.9 1.0
+color light_color 1 1 1
+
+### Shaders ###
+phong_shader red_wall red red white 10
+phong_shader green_wall green green white 10
+phong_shader blue_wall blue blue white 10
+phong_shader white_wall white white white 10
+phong_shader teapot_gold gold gold white 50
+glass_shader glass_mat glass_tint 1.5 0.0
+
+### Geometry ###
+# Large Room (Walls at +/- 6 units)
+plane -6 0 0 1 0 0 red_wall
+plane 6 0 0 -1 0 0 green_wall
+plane 0 -6 0 0 1 0 white_wall
+plane 0 6 0 0 -1 0 white_wall
+plane 0 0 -6 0 0 1 blue_wall
+
+# The Teapot 
+# (Assuming it is centered at 0,0,0, we leave it there)
+mesh ./obj/teapot.obj teapot_gold
+
+# The Glass Sphere 
+# Positioned at y = -5.2 (just above the floor at -6)
+# and z = 3.0 (between the teapot and the camera)
+sphere 0.0 3.2 3.0 0.8 glass_mat
+
+### Lighting ###
+# Position: (0, 4, 5) - High up and FORWARD of the teapot
+# This will illuminate the face of the teapot and the sphere
+point_light 0 4.0 5.0 light_color 300.0
+ambient_light white 0.1
+
+### Camera ###
+# Positioned at Z = 15 to capture the entire 12-unit wide room
+camera 0 5 15 0 0 0 0 1 0 45
