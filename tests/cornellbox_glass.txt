@@ -1,6 +1,5 @@
 ### Global Settings ###
-# size 640 480
-size 1920 1080
+size 640 480
 recursion_depth_limit 10
 enable_shadows 1
 
