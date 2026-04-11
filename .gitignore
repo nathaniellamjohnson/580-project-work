@@ -6,6 +6,8 @@ diff.ppm
 output.ppm
 ray_tracer
 *.o
+*.obj
+*.exe
 grading
 
 # Scons stuff

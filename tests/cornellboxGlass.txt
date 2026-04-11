@@ -1,11 +1,12 @@
 ### Global Settings ###
 size 640 480
-recursion_depth_limit 5
+recursion_depth_limit 10
 enable_shadows 1
 
 ### Color Definitions ###
 color red 0.75 0.1 0.1
 color green 0.1 0.75 0.1
+color blue 0.1 0.1 0.75
 color white 0.75 0.75 0.75
 color light_color 1 1 1
 color glass_tint 0.9 0.9 1.0
@@ -33,17 +34,17 @@ plane 0 -1 0 0 1 0 white_wall
 # Ceiling (White)
 plane 0 1 0 0 -1 0 white_wall
 # Back Wall (Blue)
-plane 0 0 -1 0 0 1 blue_wall
+plane 0 0 -4 0 0 1 blue_wall
 
 ### Geometry: Inner Objects ###
 # Large reflective sphere on the left
 sphere -0.4 -0.6 -0.3 0.4 mirror
-# Small matte sphere on the right
+# Small glass sphere on the right
 sphere 0.3 -0.7 0.2 0.3 glass_sphere
 
 ### Lighting ###
 # Point light placed near the ceiling
-point_light 0 0.9 0 light_color 1.5
+point_light 0 0.9 0 light_color 10.5
 ambient_light white 0.1
 
 ### Camera ###
