@@ -2,6 +2,7 @@
 #define __RENDER_WORLD_H__
 
 #include <vector>
+#include <random>
 #include "camera.h"
 #include "hierarchy.h"
 #include "object.h"
@@ -23,6 +24,8 @@ public:
 
     bool enable_shadows;
     int recursion_depth_limit;
+
+    std::mt19937 rng; // RNG creator, default seed is 42
 
     Hierarchy hierarchy;
 

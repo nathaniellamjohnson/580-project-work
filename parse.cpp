@@ -29,6 +29,7 @@ void Parse(Render_World& world,int& width,int& height,const char* test_file)
     char buff[1000];
     vec3 u,v,w;
     std::string s0,s1,s2,mat;
+    bool b;
 
     std::map<std::string,vec3> colors;
     std::map<std::string,Shader*> shaders;
@@ -80,11 +81,11 @@ void Parse(Render_World& world,int& width,int& height,const char* test_file)
         }
         else if(item=="flat_shader")
         {
-            ss>>name>>s0;
+            ss>>name>>s0>>b;
             assert(ss);
             std::map<std::string,vec3>::const_iterator c0=colors.find(s0);
             assert(c0!=colors.end());
-            shaders[name]=new Flat_Shader(world,c0->second);
+            shaders[name]=new Flat_Shader(world,c0->second, b);
         }
         else if(item=="phong_shader")
         {

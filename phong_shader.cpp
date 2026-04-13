@@ -1,4 +1,5 @@
 #include <algorithm>
+#include "brdf.h"
 #include "light.h"
 #include "phong_shader.h"
 #include "ray.h"
@@ -9,6 +10,7 @@ vec3 Phong_Shader::
 Shade_Surface(const Ray& ray,const vec3& intersection_point,
     const vec3& normal,int recursion_depth) const
 {
+    std::cout << "(Phong_Shader) - Shade surface should not be called in MCPT" << std::endl;
     vec3 color;
     
     // Lights array from world object linked in shader
@@ -56,4 +58,93 @@ Shade_Surface(const Ray& ray,const vec3& intersection_point,
     }
 
     return color;
+}
+
+// Monte Carlo Path Tracing Functions (Per shader basis)
+vec3 Phong_Shader::Emission() const 
+{
+    return vec3(0.0, 0.0, 0.0); // phong shader not emissive
+}
+
+BSDF_Sample Phong_Shader::Sample(const vec3& normal, const vec3& wo, std::mt19937& rng) const
+{
+    // this version uses branching weighted by luminance 
+    // can also do a mixing situation where we calculate 
+    BSDF_Sample result;
+
+    std::uniform_real_distribution<float> uniform(0.0f, 1.0f);
+    float xi = uniform(rng); // random [0, 1] float used to randomly choose between diffuse and specular branch
+
+    glm::float3 N(normal[0], normal[1], normal[2]); // glm normal
+    glm::float3 V(wo[0], wo[1], wo[2]); // outgoing light
+
+    // Luminance from linear rgb values - https://en.wikipedia.org/wiki/Relative_luminance
+    // Used to determine if diffuse or specular has a higher important
+    auto luminance = [](const vec3& c)
+    {
+        return 0.2126*c.x[0] + 0.7152*c.x[1] + 0.0722*c.x[2];
+    };
+
+    float diffuse_luminance = luminance(color_diffuse);
+    float specular_luminance = luminance(color_specular);
+    float sum_luminance = diffuse_luminance + specular_luminance + 1e-6f;
+
+    float probability_diffuse = diffuse_luminance / sum_luminance;
+    float probability_luminance = specular_luminance / sum_luminance;
+
+    glm::float3 Llocal;
+    float pdf = 0.0f;
+    glm::float3 f(0,0,0);
+
+    // Build local frame
+    glm::float4 quatRotationToZ = brdf::getRotationToZAxis(N);
+    glm::float4 quatRotationFromZ = brdf::invertRotation(quatRotationToZ);
+
+    glm::float3 Vlocal = brdf::rotatePoint(quatRotationToZ, V);
+
+    glm::float2 u(uniform(rng), uniform(rng)); // Polar coords for diffuse 
+
+    if (xi < probability_diffuse) // Diffuse branch
+    {
+        // see Flat_Shader::sample for indepth comments
+        Llocal = brdf::sampleHemisphere(u, pdf);
+
+        float cosTheta = Llocal.z;
+
+        // Lambertian BRDF
+        f = glm::float3(color_diffuse[0], color_diffuse[1], color_diffuse[2]) * (1.0f / PI);
+
+        // mixture pdf
+        pdf = probability_diffuse * pdf;
+    }
+    else // Specular branch
+    {
+        float shininess = specular_power;
+
+        // samplePhong returns a direction in lobe space centered around +Z.
+        // rotate the lobe to align with the perfect reflection direction
+        glm::float3 Lphong = brdf::samplePhong(Vlocal, shininess, u, pdf);
+        const glm::float3 Nlocal(0.0f, 0.0f, 1.0f);
+        glm::float3 lobe_direction = reflect(-Vlocal, Nlocal);
+        Llocal = brdf::rotatePoint(brdf::getRotationFromZAxis(lobe_direction), Lphong);
+
+        // Evaluate Phong BRDF
+        float norm = (shininess + 2.0f) / (2.0f * PI);
+
+        glm::float3 R = reflect(-Llocal, Nlocal);
+        float spec = pow(glm::max(0.0f, dot(R, Vlocal)), shininess);
+
+        f = glm::float3(color_specular.x[0], color_specular.x[1], color_specular.x[2]) * norm * spec;
+
+        pdf = probability_luminance * pdf;
+    }
+
+    // Transform back to world
+    glm::float3 Lworld = brdf::rotatePoint(quatRotationFromZ, Llocal);
+
+    result.direction = vec3(Lworld.x, Lworld.y, Lworld.z).normalized();
+    result.brdf = vec3(f.x, f.y, f.z);
+    result.pdf = pdf;
+
+    return result;
 }

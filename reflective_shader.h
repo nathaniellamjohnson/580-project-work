@@ -17,5 +17,10 @@ public:
 
      virtual vec3 Shade_Surface(const Ray& ray,const vec3& intersection_point,
          const vec3& normal,int recursion_depth) const override;
+
+
+    // Monte Carlo Path Tracing Functions (Per shader basis)
+    vec3 Emission() const override;
+    BSDF_Sample Sample(const vec3& normal, const vec3& wo, std::mt19937& rng) const override;
 };
 #endif
