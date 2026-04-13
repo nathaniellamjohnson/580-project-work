@@ -30,6 +30,7 @@ void Parse(Render_World& world,int& width,int& height,const char* test_file)
     vec3 u,v,w;
     std::string s0,s1,s2,mat;
     bool b;
+    int spp;
 
     std::map<std::string,vec3> colors;
     std::map<std::string,Shader*> shaders;
@@ -52,6 +53,12 @@ void Parse(Render_World& world,int& width,int& height,const char* test_file)
         {
             ss>>width>>height;
             assert(ss);
+        }
+        else if(item=="spp")
+        {
+            ss>>spp;
+            assert(ss);
+            world.samples_per_pixel = spp;
         }
         else if(item=="color")
         {

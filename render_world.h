@@ -26,6 +26,7 @@ public:
     int recursion_depth_limit;
 
     std::mt19937 rng; // RNG creator, default seed is 42
+    int samples_per_pixel;
 
     Hierarchy hierarchy;
 

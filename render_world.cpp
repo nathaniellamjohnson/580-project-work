@@ -11,7 +11,7 @@ extern bool disable_hierarchy;
 
 Render_World::Render_World()
     :background_shader(0),ambient_intensity(0),enable_shadows(true),
-    recursion_depth_limit(3), rng(42)
+    recursion_depth_limit(3), rng(42), samples_per_pixel(64)
 {}
 
 Render_World::~Render_World()
@@ -47,7 +47,7 @@ Hit Render_World::Closest_Intersection(const Ray& ray)
 // set up the initial view ray and call
 void Render_World::Render_Pixel(const ivec2& pixel_index)
 {
-    size_t spp = 64; // samples per pixel
+    size_t spp = samples_per_pixel; // samples per pixel
     vec3 color (0.0, 0.0, 0.0);
 
     for (size_t i = 0; i < spp; i++)
