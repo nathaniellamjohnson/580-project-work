@@ -1,0 +1,43 @@
+### Global Settings ###
+size 640 480
+recursion_depth_limit 8
+enable_shadows 1
+spp 256
+
+### Color Definitions ###
+color red 0.75 0.1 0.1
+color green 0.1 0.75 0.1
+color white 1 1 1
+color black 0 0 0
+color sphere_color 0.5 0.5 0.5
+
+### Shaders ###
+# Diffuse shaders for test geometry
+phong_shader red_floor black red white 10
+phong_shader green_wall black green white 10
+phong_shader test_sphere black sphere_color white 20
+
+# Emissive shell
+flat_shader emissive_shell white 1
+flat_shader bg black 0
+flat_shader emissive_green green 1
+
+### Geometry ###
+# Red horizontal floor plane (normal pointing up)
+plane 0 -1.5 0 0 1 0 red_floor
+
+# Green vertical plane to the left (normal pointing right, along +X)
+plane -1.0 0 0 1 0 0 green_wall
+
+# Test sphere to the right of green plane, sitting on the floor
+sphere 1.0 -1.0 0 0.5 test_sphere
+
+# Large enclosing white emissive sphere for global illumination
+sphere 0 -0.5 0 10.0 emissive_shell
+
+### Background ###
+background bg
+
+### Camera ###
+# Angled perspective view rotated left to show more of the green wall
+camera -0.5 -0.5 4.2 0.0 -1.0 0 0 1 0 45

@@ -6,6 +6,8 @@ vec3 Reflective_Shader::
 Shade_Surface(const Ray& ray,const vec3& intersection_point,
     const vec3& normal,int recursion_depth) const
 {
+    std::cout << "Reflective Shader shade surface should not be used." << std::endl;
+
     vec3 base_color = shader->Shade_Surface(ray, intersection_point, normal, recursion_depth); 
     vec3 reflected_color = {0.0, 0.0, 0.0};
 
@@ -35,3 +37,17 @@ Shade_Surface(const Ray& ray,const vec3& intersection_point,
     // Combine results
     return (base_color * (1.0 - this->reflectivity)) + ((this->reflectivity) * reflected_color);
 }
+
+// Monte Carlo Path Tracing Functions (Per shader basis)
+vec3 Reflective_Shader::Emission() const 
+{
+    std::cout << "Reflective Shader Emission() not finished." << std::endl;
+    return vec3();
+}
+
+BSDF_Sample Reflective_Shader::Sample(const vec3& normal, const vec3& wo, std::mt19937& rng) const 
+{
+    std::cout << "Reflective Shader Sample() not finished." << std::endl;
+    BSDF_Sample result; 
+    return result;
+};
