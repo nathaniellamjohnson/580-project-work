@@ -15,17 +15,27 @@ Hit Sphere::Intersection(const Ray& ray, int part) const
     {
         return {nullptr, 0.0, part}; // imaginary solution, no intersection, return nothing
     }
-    
-    double t = (-b - sqrt(det)) / (2.0 * a); // subtraction for the smaller one, potential source of error if negative?
-    
-    if (t >= 0.0)
+
+    double sqrt_det = sqrt(det);
+    double t0 = (-b - sqrt_det) / (2.0 * a); // negative branch
+    double t1 = (-b + sqrt_det) / (2.0 * a); // postive branch
+
+    // edge case if ray starts inside sphere
+    if (t0 > t1) 
     {
-        return {this, t, part}; // either 1 or 2 solutions, choose the 
+        std::swap(t0, t1);
     }
-    else 
+
+    if (t0 >= small_t) 
     {
-        return {nullptr, 0.0, part};
+        return {this, t0, part};
     }
+    if (t1 >= small_t)
+    {
+        return {this, t1, part};
+    }
+
+    return {nullptr, 0.0, part};
 }
 
 vec3 Sphere::Normal(const vec3& point, int part) const
