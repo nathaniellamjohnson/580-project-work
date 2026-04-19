@@ -1,0 +1,32 @@
+### Global Settings ###
+size 640 480
+recursion_depth_limit 8
+enable_shadows 1
+spp 32
+
+### Color Definitions ###
+color grey 0.18 0.18 0.18
+color white 1 1 1
+color black 0 0 0
+
+### Shaders ###
+# shader_type name ambient diffuse specular shininess
+phong_shader center_phong black grey white 20
+flat_shader furnace_white white 1
+flat_shader bg black 0
+
+### Geometry ###
+# Non-emissive phong sphere under test
+sphere 0 0 0 0.5 center_phong
+# Large enclosing emissive sphere (camera is inside this sphere)
+sphere 0 0 0 5.0 furnace_white
+
+### Lighting ###
+ambient_light black 0
+
+### Background ###
+background bg
+
+### Camera ###
+# Place camera inside the furnace, looking at the center sphere
+camera 0 0 2.2 0 0 0 0 1 0 45

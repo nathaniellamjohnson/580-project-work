@@ -1,0 +1,32 @@
+### Global Settings ###
+size 640 480
+recursion_depth_limit 8
+enable_shadows 1
+spp 16
+
+### Color Definitions ###
+color grey 0.18 0.18 0.18
+color white 1 1 1
+color black 0 0 0
+
+### Shaders ###
+# shader_type name color is_emissive
+flat_shader center_grey grey 0
+flat_shader furnace_white white 1
+flat_shader bg black 0
+
+### Geometry ###
+# Non-emissive sphere under test
+sphere 0 0 0 0.5 center_grey 0
+# Large enclosing emissive sphere (camera is inside this sphere)
+sphere 0 0 0 5.0 furnace_white 1
+
+### Lighting ###
+ambient_light black 0
+
+### Background ###
+background bg
+
+### Camera ###
+# Place camera inside the furnace, looking at the center sphere
+camera 0 0 2.2 0 0 0 0 1 0 45
