@@ -84,10 +84,7 @@ BSDF_Sample Glass_Shader::Sample(const vec3& normal, const vec3& wo, std::mt1993
     vec3 norm = normal;
     float n1 = 1.0;
     float n2 = ior;
-    bool flipped = false;
     if(dot(ray_dir, normal) > 0){
-        // std::cout << "I'm here" << std::endl;
-        flipped = true;
         n1 = ior;
         n2 = 1.0;
         norm = -norm;
@@ -102,17 +99,9 @@ BSDF_Sample Glass_Shader::Sample(const vec3& normal, const vec3& wo, std::mt1993
     std::uniform_real_distribution<float> uniform(0.0f, 1.0f);
     // Generate a random float
     float random_val = uniform(rng);
-    float reflectivity = 0.1;
+    float reflectivity = 0.05;
     float tint = 0.05;
 
-    
-    // vec3 norm = normal;
-    // if(dot(ray_dir, normal) > 0){
-    //     // std::cout << "I'm here" << std::endl;
-    //     n1 = ior;
-    //     n2 = 1.0;
-    //     norm = -norm;
-    // }
     float iorRatio = n1/n2;
     float temp = 1 - pow(iorRatio,2) * pow(dot(-norm,ray_dir),2);
     
@@ -146,18 +135,10 @@ BSDF_Sample Glass_Shader::Sample(const vec3& normal, const vec3& wo, std::mt1993
         result.pdf = std::max(0.0, dot(norm, result.direction));
     }
     else{
-        // std::cout << "I'm here" << std::endl;
         vec3 refract_dir = ((ray_dir * iorRatio) + norm*(iorRatio*dot(-norm,ray_dir) - sqrt(temp))).normalized();
         result.brdf = vec3(1.0, 1.0, 1.0); // what % of each light type to let through, since perfect mirror, let it all through
         result.direction = refract_dir;
-        result.pdf = abs(dot(-norm, result.direction));//std::max(0.0, dot(-norm, result.direction));
-        // if(flipped == true){
-        //     std::cout << dot(-norm, result.direction) << std::endl;
-        // }
-        // vec3 refract_start_point = (intersection_point) + (refract_dir * small_t);
-        // Ray refract_ray = Ray(refract_start_point, refract_dir);
-            // Cast new ray from there
-        // refract_color = this->world.Cast_Ray(refract_ray, recursion_depth - 1);
+        result.pdf = abs(dot(-norm, result.direction));
     }
 
     return result;
