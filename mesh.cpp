@@ -69,7 +69,7 @@ Hit Mesh::Intersection(const Ray& ray, int part) const
         hit.object = nullptr;
         hit.dist = INFINITY;
         
-        for (u_int64_t part = 0; part < number_parts; part++)
+        for (uint64_t part = 0; part < number_parts; part++)
         {
             double tri_dist = 0.0;
             bool tri_intersect_bool = Intersect_Triangle(ray, part, tri_dist);
