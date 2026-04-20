@@ -67,3 +67,98 @@ Shade_Surface(const Ray& ray,const vec3& intersection_point,
     // Combine results
     return (this->color * tint) + ( reflected_color * reflectivity) + ((1.0 - tint - reflectivity) * refract_color);
 }
+
+vec3 Glass_Shader::Emission() const 
+{
+    return vec3(0.0, 0.0, 0.0); // not emissive
+}
+
+BSDF_Sample Glass_Shader::Sample(const vec3& normal, const vec3& wo, std::mt19937& rng) const 
+{
+    BSDF_Sample result; 
+
+    // For a perfect mirror, there is zero % of any reflection except in the 
+    // perfect reflection direction. 
+    
+    vec3 ray_dir = -wo;
+    vec3 norm = normal;
+    float n1 = 1.0;
+    float n2 = ior;
+    bool flipped = false;
+    if(dot(ray_dir, normal) > 0){
+        // std::cout << "I'm here" << std::endl;
+        flipped = true;
+        n1 = ior;
+        n2 = 1.0;
+        norm = -norm;
+    }
+    vec3 reflection_dir = (ray_dir - (2.0 * dot(ray_dir, norm) * norm)).normalized();
+
+    // From RenderWorld.cpp - vec3 Lo = Le + s.brdf * Li * (cosTheta / s.pdf);
+    // From RenderWorld.cpp - float cosTheta = std::max(0.0, dot(normal_at_intersection_point, s.direction));
+    // we need to make (cosTheta * s.brdf) / (s.pdf) == 1 so Li is the only contribution
+    // s.brdf should = 1, 1, 1 (b/c it's a vector)
+    // thus, cosTheta / s.pdf == 1 & thus cosTheta = s.pdf
+    std::uniform_real_distribution<float> uniform(0.0f, 1.0f);
+    // Generate a random float
+    float random_val = uniform(rng);
+    float reflectivity = 0.1;
+    float tint = 0.05;
+
+    
+    // vec3 norm = normal;
+    // if(dot(ray_dir, normal) > 0){
+    //     // std::cout << "I'm here" << std::endl;
+    //     n1 = ior;
+    //     n2 = 1.0;
+    //     norm = -norm;
+    // }
+    float iorRatio = n1/n2;
+    float temp = 1 - pow(iorRatio,2) * pow(dot(-norm,ray_dir),2);
+    
+    if (random_val > 1-tint){
+        // copied from flat_shader.cpp
+        glm::float2 u(uniform(rng), uniform(rng)); // create 2 real numbers 
+
+        // Float 4s are quaternions here
+        glm::float4 quatRotationFromZ = brdf::getRotationFromZAxis(glm::float3(norm[0], norm[1], norm[2]));
+
+        // local space sampling 
+        // maps 2d [0,1] polar coords to 3d direction vec around +Z axis
+        float pdf; 
+        glm::float3 sampleLocal = brdf::sampleHemisphere(u, pdf);
+
+        // world space
+        // we then rotate the local +Z-based direction vec to world space
+        glm::float3 sampleWorld = brdf::rotatePoint(quatRotationFromZ, sampleLocal);
+
+        result.direction = vec3(sampleWorld.x, sampleWorld.y, sampleWorld.z);
+
+        // lambertian / ideal matte -> brdf = albedo / pi 
+        // brdf lib already handles cosine weighting in sampleHemisphere
+        result.brdf = color * (1.0f / (float) pi);
+
+        result.pdf = pdf; // equation for pdf = (cos(theta) / pi) from sample hemisphere
+    }
+    else if((random_val < reflectivity) || temp < 0){
+        result.brdf = vec3(1.0, 1.0, 1.0); // what % of each light type to let through, since perfect mirror, let it all through
+        result.direction = reflection_dir;
+        result.pdf = std::max(0.0, dot(norm, result.direction));
+    }
+    else{
+        // std::cout << "I'm here" << std::endl;
+        vec3 refract_dir = ((ray_dir * iorRatio) + norm*(iorRatio*dot(-norm,ray_dir) - sqrt(temp))).normalized();
+        result.brdf = vec3(1.0, 1.0, 1.0); // what % of each light type to let through, since perfect mirror, let it all through
+        result.direction = refract_dir;
+        result.pdf = abs(dot(-norm, result.direction));//std::max(0.0, dot(-norm, result.direction));
+        // if(flipped == true){
+        //     std::cout << dot(-norm, result.direction) << std::endl;
+        // }
+        // vec3 refract_start_point = (intersection_point) + (refract_dir * small_t);
+        // Ray refract_ray = Ray(refract_start_point, refract_dir);
+            // Cast new ray from there
+        // refract_color = this->world.Cast_Ray(refract_ray, recursion_depth - 1);
+    }
+
+    return result;
+};

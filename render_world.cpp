@@ -177,7 +177,7 @@ vec3 Render_World::Cast_Ray(const Ray& ray, int recursion_depth)
 
     vec3 Li = Cast_Ray(new_ray, recursion_depth - 1);
 
-    float cosTheta = std::max(0.0, dot(normal_at_intersection_point, s.direction));
+    float cosTheta = std::max(0.0, abs(dot(normal_at_intersection_point, s.direction)));
  
     vec3 Lo = Le + s.brdf * Li * (cosTheta / s.pdf);
 
