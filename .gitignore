@@ -14,3 +14,6 @@ config.log
 .sconf_temp
 
 .DS_Store
+
+# images folder
+images

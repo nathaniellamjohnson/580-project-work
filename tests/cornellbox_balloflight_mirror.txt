@@ -1,0 +1,46 @@
+### Global Settings ###
+size 640 480
+recursion_depth_limit 8
+enable_shadows 1
+spp 500
+
+### Color Definitions ###
+color red 0.75 0.1 0.1
+color green 0.1 0.75 0.1
+color white 0.75 0.75 0.75
+color blue 0.1 0.1 0.75
+color light_color 10.0 10.0 10.0
+color grey 0.5 0.5 0.5
+
+### Shaders ###
+phong_shader red_wall red red white 10
+phong_shader green_wall green green white 10
+phong_shader white_wall white white white 10
+phong_shader grey_ball grey grey white 10
+phong_shader blue_wall blue blue white 10
+
+reflective_shader mirror white_wall 0.8
+
+#       shader_type name color is_emissive
+flat_shader center_ball grey 0
+flat_shader light_sphere light_color 1
+
+### Geometry: The Box ###
+plane -1 0 0 1 0 0 red_wall
+plane 1 0 0 -1 0 0 green_wall
+plane 0 -1 0 0 1 0 white_wall
+plane 0 1 0 0 -1 0 white_wall
+plane 0 0 -1 0 0 1 blue_wall
+plane 0 0 4 0 0 -1 white_wall
+
+### Geometry: Inner Object ###
+# Single phong-shaded sphere centered in the Cornell box volume
+sphere 0 -0.6 0 0.35 mirror
+# White light sphere near the ceiling
+sphere 0 0.82 0 0.12 light_sphere
+
+### Lighting ###
+ambient_light white 0.05
+
+### Camera ###
+camera 0 0 3.5 0 0 0 0 1 0 45

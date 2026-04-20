@@ -148,3 +148,103 @@ BSDF_Sample Phong_Shader::Sample(const vec3& normal, const vec3& wo, std::mt1993
 
     return result;
 }
+
+
+// Multiple importance sampling example
+// Smooths out final image noise
+
+
+// BSDF_Sample Phong_Shader::Sample(const vec3& normal, const vec3& wo, std::mt19937& rng) const
+// {
+//     BSDF_Sample result;
+
+//     std::uniform_real_distribution<float> uniform(0.0f, 1.0f);
+//     float xi = uniform(rng);
+
+//     glm::float3 N(normal[0], normal[1], normal[2]);
+//     glm::float3 V(wo[0], wo[1], wo[2]);
+
+//     auto luminance = [](const vec3& c)
+//     {
+//         return 0.2126*c.x[0] + 0.7152*c.x[1] + 0.0722*c.x[2];
+//     };
+
+//     float diffuse_luminance = luminance(color_diffuse);
+//     float specular_luminance = luminance(color_specular);
+//     float sum_luminance = diffuse_luminance + specular_luminance;
+
+//     if (sum_luminance <= 1e-6f)
+//     {
+//         result.direction = vec3(0.0, 0.0, 0.0);
+//         result.brdf = vec3(0.0, 0.0, 0.0);
+//         result.pdf = 0.0;
+//         return result;
+//     }
+
+//     float probability_diffuse = diffuse_luminance / sum_luminance;
+//     float probability_specular = specular_luminance / sum_luminance;
+
+//     glm::float3 Llocal;
+//     float sampled_pdf = 0.0f;
+
+//     glm::float4 quatRotationToZ = brdf::getRotationToZAxis(N);
+//     glm::float4 quatRotationFromZ = brdf::invertRotation(quatRotationToZ);
+//     glm::float3 Vlocal = brdf::rotatePoint(quatRotationToZ, V);
+
+//     glm::float2 u(uniform(rng), uniform(rng));
+//     const glm::float3 Nlocal(0.0f, 0.0f, 1.0f);
+//     float shininess = (float)specular_power;
+
+//     if (xi < probability_diffuse)
+//     {
+//         Llocal = brdf::sampleHemisphere(u, sampled_pdf);
+//     }
+//     else
+//     {
+//         // taken from brdf.h sampleSpecularPhong function
+//         // Sampled LPhong is in "lobe space" - where Phong lobe is centered around +Z axis
+// 	    // We need to rotate it in direction of perfect reflection
+//         glm::float3 Lphong = brdf::samplePhong(Vlocal, shininess, u, sampled_pdf);
+//         glm::float3 lobe_direction = reflect(-Vlocal, Nlocal);
+//         Llocal = brdf::rotatePoint(brdf::getRotationFromZAxis(lobe_direction), Lphong);
+//     }
+
+//     float NdotL = glm::max(0.0f, Llocal.z);
+//     if (NdotL <= 0.0f)
+//     {
+//         result.direction = vec3(0.0, 0.0, 0.0);
+//         result.brdf = vec3(0.0, 0.0, 0.0);
+//         result.pdf = 0.0;
+//         return result;
+//     }
+
+//     glm::float3 Rlocal = reflect(-Llocal, Nlocal);
+//     float RdotV = glm::max(0.0f, dot(Rlocal, Vlocal));
+
+//     glm::float3 diffuse_brdf = glm::float3(color_diffuse[0], color_diffuse[1], color_diffuse[2]) * (1.0f / PI);
+//     float phong_brdf_norm = (shininess + 2.0f) / (2.0f * PI);
+//     glm::float3 specular_brdf = glm::float3(color_specular[0], color_specular[1], color_specular[2])
+//         * (phong_brdf_norm * pow(RdotV, shininess));
+
+//     float diffuse_pdf = NdotL / PI;
+//     float specular_pdf = brdf::phongNormalizationTerm(shininess) * pow(RdotV, shininess);
+//     float mixture_pdf = probability_diffuse * diffuse_pdf + probability_specular * specular_pdf;
+
+//     if (mixture_pdf <= 0.0f)
+//     {
+//         result.direction = vec3(0.0, 0.0, 0.0);
+//         result.brdf = vec3(0.0, 0.0, 0.0);
+//         result.pdf = 0.0;
+//         return result;
+//     }
+
+//     glm::float3 Lworld = brdf::rotatePoint(quatRotationFromZ, Llocal);
+
+//     result.direction = vec3(Lworld.x, Lworld.y, Lworld.z).normalized();
+//     result.brdf = vec3(diffuse_brdf.x + specular_brdf.x,
+//                        diffuse_brdf.y + specular_brdf.y,
+//                        diffuse_brdf.z + specular_brdf.z);
+//     result.pdf = mixture_pdf;
+
+//     return result;
+// }
