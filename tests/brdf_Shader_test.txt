@@ -1,0 +1,63 @@
+### Global Settings ###
+size 640 480
+recursion_depth_limit 8
+enable_shadows 1
+spp 64
+
+### Color Definitions ###
+color red 0.75 0.1 0.1
+color green 0.1 0.75 0.1
+color white 0.85 0.85 0.85
+color black 0 0 0
+color gray 0.5 0.5 0.5
+color light_color 25 25 25 
+
+### Shaders ###
+# Cornell box walls using BRDF diffuse
+brdf_shader floor_shader white 0.6
+brdf_shader ceiling_shader white 0.6
+brdf_shader back_shader white 0.6
+brdf_shader left_shader red 0.6
+brdf_shader right_shader green 0.6
+
+# Test spheres with different roughness
+brdf_shader sphere_low gray 0.1
+brdf_shader sphere_mid gray 0.5
+brdf_shader sphere_high gray 1.0
+
+# Emissive light and background
+flat_shader light_shader light_color 1
+flat_shader bg black 0
+
+### Geometry ###
+# Floor
+plane 0 -1 0 0 1 0 floor_shader
+
+# Ceiling
+plane 0 1 0 0 -1 0 ceiling_shader
+
+# Back wall
+plane 0 0 -3 0 0 1 back_shader
+
+# Left wall
+plane -2 0 0 1 0 0 left_shader
+
+# Right wall
+plane 2 0 0 -1 0 0 right_shader
+
+# Small light 
+sphere 0 0.75 -1.5 0.25 light_shader
+
+# BIG DEBUG LIGHT 
+sphere 0 -0.5 0 10.0 light_shader
+
+# Three test spheres
+sphere -0.9 -0.5 -1.8 0.5 sphere_low
+sphere 0.0 -0.5 -1.8 0.5 sphere_mid
+sphere 0.9 -0.5 -1.8 0.5 sphere_high
+
+### Background ###
+background bg
+
+### Camera ###
+camera 0 0 3.8 0 0 -1 0 1 0 45

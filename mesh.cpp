@@ -3,6 +3,7 @@
 #include <string>
 #include <limits>
 #include <algorithm>
+#include <cstdint>
 
 // Consider a triangle to intersect a ray if the ray intersects the plane of the
 // triangle with barycentric weights in [-weight_tolerance, 1+weight_tolerance]
@@ -69,7 +70,7 @@ Hit Mesh::Intersection(const Ray& ray, int part) const
         hit.object = nullptr;
         hit.dist = INFINITY;
         
-        for (u_int64_t part = 0; part < number_parts; part++)
+        for (uint64_t part = 0; part < number_parts; part++)
         {
             double tri_dist = 0.0;
             bool tri_intersect_bool = Intersect_Triangle(ray, part, tri_dist);
@@ -190,12 +191,12 @@ Box Mesh::Bounding_Box(int part) const
 {
     Box b;
     TODO; // FIXME
-
+    
     ivec3 triangle = triangles[part];
     for (int vertex_idx : triangle.x)
     {
         b.Include_Point(vertices[vertex_idx]);
     }
-
+    
     return b;
 }

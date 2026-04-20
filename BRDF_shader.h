@@ -1,35 +1,39 @@
 #ifndef __BRDF_SHADER_H__
 #define __BRDF_SHADER_H__
 
-#include <algorithm>
-#include <shader.h>
-
-//Remembering for later probs not gonna use
-enum Material{
-        Lambert,
-        Reflective,
-        Phong,
-    };
+#include "shader.h"
+#include "brdf.h"
 
 class BRDF_Shader: public Shader{
+public:
 
-    //Gonna make a shader 
-    //Note to self: We need the math functions but Ima just set up the shader first so that I can figure out if Im'm doing this right
-    //Attemping Lambertian 
-    vec3 albedo;
-
+    // Attempting Disney (Burley) Diffuse Model 
+    
+    vec3 color_diffuse;
+    float roughness;
 
     BRDF_Shader(Render_World& world_input,
-        const vec3 albedo)
-        :Shader(world_input),
-        albedo(albedo)
-    {}
+            const vec3& albedo,
+            double roughness)
+            :Shader(world_input),
+            color_diffuse(albedo),
+            roughness(roughness)
+            {}
 
-
+    //Not useful anymore for Monte Carlo
     virtual vec3 Shade_Surface(const Ray& ray,const vec3& intersection_point,
         const vec3& normal,int recursion_depth) const override;
+    
 
+    //Helper function
+    glm::float3 Evaluate_Difuse( const glm::float3& wiLocal,
+    const glm::float3& woLocal,
+    const glm::float3& baseColor,
+    float roughness) const;
 
+    //Monte Carlo shading methods
+    vec3 Emission() const override;
+    BSDF_Sample Sample(const vec3& normal, const vec3& wo, std::mt19937& rng) const override;
 };
 #endif
 
