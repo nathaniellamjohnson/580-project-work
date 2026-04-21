@@ -1,0 +1,42 @@
+### Global Settings ###
+size 640 480
+recursion_depth_limit 10
+enable_shadows 1
+enable_caustics 1
+photon_mapping_params 80000 5000 0.10  # photons_per_light max_photons_gathered gather_radius
+spp 8000
+
+### Color Definitions ###
+color red 0.75 0.1 0.1
+color green 0.1 0.75 0.1
+color blue 0.1 0.1 0.75
+color white 1.2 1.2 1.2
+color grey 0.5 0.5 0.5
+
+### Shaders ###
+phong_shader red_wall red red white 10
+phong_shader green_wall green green white 10
+phong_shader white_wall white white white 10
+phong_shader floor_mat grey grey white 8
+reflective_shader mirror white_wall 0.9
+flat_shader light_sphere white 1
+
+### Geometry ###
+plane -1 0 0 1 0 0 red_wall
+plane 1 0 0 -1 0 0 green_wall
+plane 0 -1 0 0 1 0 floor_mat
+plane 0 1 0 0 -1 0 white_wall
+plane 0 0 -4 0 0 1 white_wall
+
+### Inner Object ###
+# Mirror sphere intended to redirect photons into a bright floor patch
+sphere 0 -0.45 0 0.45 mirror
+# Emissive sphere light for Monte Carlo sampling
+sphere 0 0.82 0 0.12 light_sphere
+
+### Lighting ###
+point_light 0.68 0.75 0.25 white 12
+ambient_light white 0.02
+
+### Camera ###
+camera 0 0 3.8 0 -0.35 0 0 1 0 45

@@ -59,16 +59,16 @@ inline glm::float3 mul(glm::float3x3 a, glm::float3 b) { return b * a; }
 #define SPECULAR_TYPE 2
 
 // PIs
-#ifndef PI
-#define PI 3.141592653589f
+#ifndef PI_BRDF
+#define PI_BRDF 3.141592653589f
 #endif
 
 #ifndef TWO_PI
-#define TWO_PI (2.0f * PI)
+#define TWO_PI (2.0f * PI_BRDF)
 #endif
 
 #ifndef ONE_OVER_PI
-#define ONE_OVER_PI (1.0f / PI)
+#define ONE_OVER_PI (1.0f / PI_BRDF)
 #endif
 
 #ifndef ONE_OVER_TWO_PI
@@ -737,13 +737,13 @@ FUNCTION float Beckmann_D(float alphaSquared, float NdotH)
 {
 	float cos2Theta = NdotH * NdotH;
 	float numerator = exp((cos2Theta - 1.0f) / (alphaSquared * cos2Theta));
-	float denominator = PI * alphaSquared * cos2Theta * cos2Theta;
+	float denominator = PI_BRDF * alphaSquared * cos2Theta * cos2Theta;
 	return numerator / denominator;
 }
 
 FUNCTION float GGX_D(float alphaSquared, float NdotH) {
 	float b = ((alphaSquared - 1.0f) * NdotH * NdotH + 1.0f);
-	return alphaSquared / (PI * b * b);
+	return alphaSquared / (PI_BRDF * b * b);
 }
 
 // -------------------------------------------------------------------------
@@ -765,7 +765,7 @@ FUNCTION glm::float3 sampleGGXVNDF(glm::float3 Ve, glm::float2 alpha2D, glm::flo
 	// Source: "Sampling Visible GGX Normals with Spherical Caps" by Dupuy & Benyoub
 
 	// Sample a spherical cap in (-Vh.z, 1]
-	float phi = 2.0f * PI * u.x;
+	float phi = 2.0f * PI_BRDF * u.x;
 	float z = ((1.0f - u.y) * (1.0f + Vh.z)) - Vh.z;
 	float sinTheta = sqrt(clamp(1.0f - z * z, 0.0f, 1.0f));
 	float x = sinTheta * cos(phi);

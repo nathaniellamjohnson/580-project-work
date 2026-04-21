@@ -61,6 +61,31 @@ void Parse(Render_World& world,int& width,int& height,const char* test_file)
             assert(ss);
             world.samples_per_pixel = spp;
         }
+        else if(item=="enable_caustics")
+        {
+            ss>>world.enable_caustics;
+            assert(ss);
+        }
+        else if(item=="photon_mapping_params")
+        {
+            ss>>world.photons_per_light>>world.max_photons_gathered>>world.gather_radius;
+            assert(ss);
+        }
+        else if(item=="photons_per_light")
+        {
+            ss>>world.photons_per_light;
+            assert(ss);
+        }
+        else if(item=="max_photons_gathered")
+        {
+            ss>>world.max_photons_gathered;
+            assert(ss);
+        }
+        else if(item=="gather_radius")
+        {
+            ss>>world.gather_radius;
+            assert(ss);
+        }
         else if(item=="color")
         {
             ss>>name>>u;

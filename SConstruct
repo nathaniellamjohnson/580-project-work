@@ -10,6 +10,6 @@ env.Program("ray_tracer",
                 "flat_shader.cpp","main.cpp","parse.cpp",
                 "phong_shader.cpp","plane.cpp","reflective_shader.cpp",
                 "render_world.cpp","sphere.cpp","box.cpp","mesh.cpp",
-                "glass_shader.cpp"
+                "glass_shader.cpp", "caustic_map.cpp"
             ])
 
