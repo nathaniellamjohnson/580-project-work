@@ -112,7 +112,7 @@ BSDF_Sample Phong_Shader::Sample(const vec3& normal, const vec3& wo, std::mt1993
         float cosTheta = Llocal.z;
 
         // Lambertian BRDF
-        f = glm::float3(color_diffuse[0], color_diffuse[1], color_diffuse[2]) * (1.0f / PI);
+        f = glm::float3(color_diffuse[0], color_diffuse[1], color_diffuse[2]) * (1.0f / PI_BRDF);
 
         // mixture pdf
         pdf = probability_diffuse * pdf;
@@ -129,7 +129,7 @@ BSDF_Sample Phong_Shader::Sample(const vec3& normal, const vec3& wo, std::mt1993
         Llocal = brdf::rotatePoint(brdf::getRotationFromZAxis(lobe_direction), Lphong);
 
         // Evaluate Phong BRDF
-        float norm = (shininess + 2.0f) / (2.0f * PI);
+        float norm = (shininess + 2.0f) / (2.0f * PI_BRDF);
 
         glm::float3 R = reflect(-Llocal, Nlocal);
         float spec = pow(glm::max(0.0f, dot(R, Vlocal)), shininess);

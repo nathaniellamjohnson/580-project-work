@@ -4,8 +4,11 @@
 build
 diff.ppm
 output.ppm
+*.ppm
 ray_tracer
 *.o
+*.obj
+*.exe
 grading
 
 # Scons stuff

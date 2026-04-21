@@ -1,0 +1,43 @@
+### Global Settings ###
+size 640 480
+recursion_depth_limit 10
+enable_shadows 1
+enable_caustics 1
+photon_mapping_params 90000 260 0.06  # photons_per_light max_photons_gathered gather_radius
+spp 8000
+
+### Color Definitions ###
+color red 0.75 0.1 0.1
+color green 0.1 0.75 0.1
+color blue 0.1 0.1 0.75
+color white 1.2 1.2 1.2
+color grey 0.5 0.5 0.5
+color glass_tint 0.92 0.96 1.0
+
+### Shaders ###
+phong_shader red_wall red red white 10
+phong_shader green_wall green green white 10
+phong_shader white_wall white white white 10
+phong_shader floor_mat grey grey white 8
+glass_shader glass_ball glass_tint 1.5
+flat_shader light_sphere white 1
+
+### Geometry ###
+plane -1 0 0 1 0 0 red_wall
+plane 1 0 0 -1 0 0 green_wall
+plane 0 -1 0 0 1 0 floor_mat
+plane 0 1 0 0 -1 0 white_wall
+plane 0 0 -4 0 0 1 white_wall
+
+### Inner Object ###
+# Glass sphere intended to throw a bright caustic onto the floor
+sphere 0 -0.45 0 0.45 glass_ball
+# Emissive sphere light for Monte Carlo sampling
+sphere 0 0.82 0 0.12 light_sphere
+
+### Lighting ###
+point_light 0 0.68 0 white 14
+ambient_light white 0.04
+
+### Camera ###
+camera 0 0 3.8 0 -0.35 0 0 1 0 45

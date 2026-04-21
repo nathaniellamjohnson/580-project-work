@@ -8,6 +8,7 @@
 #include "point_light.h"
 #include "reflective_shader.h"
 #include "BRDF_shader.h"
+#include "glass_shader.h"
 #include "render_world.h"
 #include "sphere.h"
 #include <map>
@@ -60,6 +61,31 @@ void Parse(Render_World& world,int& width,int& height,const char* test_file)
             ss>>spp;
             assert(ss);
             world.samples_per_pixel = spp;
+        }
+        else if(item=="enable_caustics")
+        {
+            ss>>world.enable_caustics;
+            assert(ss);
+        }
+        else if(item=="photon_mapping_params")
+        {
+            ss>>world.photons_per_light>>world.max_photons_gathered>>world.gather_radius;
+            assert(ss);
+        }
+        else if(item=="photons_per_light")
+        {
+            ss>>world.photons_per_light;
+            assert(ss);
+        }
+        else if(item=="max_photons_gathered")
+        {
+            ss>>world.max_photons_gathered;
+            assert(ss);
+        }
+        else if(item=="gather_radius")
+        {
+            ss>>world.gather_radius;
+            assert(ss);
         }
         else if(item=="color")
         {
@@ -122,6 +148,14 @@ void Parse(Render_World& world,int& width,int& height,const char* test_file)
             std::map<std::string,Shader*>::const_iterator sh=shaders.find(s0);
             assert(sh!=shaders.end());
             shaders[name]=new Reflective_Shader(world,sh->second,f0);
+        }
+        else if(item == "glass_shader"){
+            ss>>name>>s0>>f0;
+            assert(ss);
+            std::map<std::string,vec3>::const_iterator c0=colors.find(s0);
+            // std::map<std::string,Shader*>::const_iterator sh=shaders.find(s0);
+            assert(c0!=colors.end());
+            shaders[name]=new Glass_Shader(world,c0->second,f0);
         }
         else if(item=="point_light")
         {
