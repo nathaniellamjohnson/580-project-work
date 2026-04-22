@@ -26,6 +26,10 @@ body {
   padding: 16px;
 }
 
+a {
+  color: inherit;
+}
+
 .topbar {
   display: flex;
   align-items: center;
@@ -158,4 +162,119 @@ canvas {
   max-width: 100%;
   max-height: 100%;
   object-fit: contain;
+}
+
+@media (max-width: 1100px) {
+  .topbar h1 {
+    font-size: 21px;
+  }
+
+  .layout {
+    min-height: 520px;
+  }
+
+  .editor-panel {
+    flex-basis: 44%;
+  }
+
+  .output-panel {
+    flex-basis: 56%;
+  }
+}
+
+@media (max-width: 900px) {
+  body {
+    padding: 12px;
+  }
+
+  .topbar {
+    flex-wrap: wrap;
+    align-items: flex-start;
+    margin-bottom: 12px;
+  }
+
+  .topbar h1 {
+    font-size: 19px;
+  }
+
+  .topbar p {
+    font-size: 14px;
+    line-height: 1.4;
+  }
+
+  #render-btn {
+    width: 100%;
+    min-height: 44px;
+  }
+
+  .layout {
+    flex-direction: column;
+    height: auto;
+    min-height: 0;
+  }
+
+  .panel {
+    padding: 12px;
+    border-radius: 14px;
+  }
+
+  .editor-panel,
+  .output-panel {
+    flex: 1 1 auto;
+  }
+
+  .editor-panel {
+    min-height: 320px;
+  }
+
+  .canvas-shell {
+    min-height: 300px;
+  }
+}
+
+@media (max-width: 560px) {
+  body {
+    padding: 10px;
+  }
+
+  .topbar {
+    gap: 10px;
+  }
+
+  .topbar h1 {
+    font-size: 17px;
+    line-height: 1.25;
+  }
+
+  .topbar p {
+    font-size: 13px;
+  }
+
+  button {
+    width: 100%;
+    border-radius: 12px;
+  }
+
+  .layout {
+    gap: 12px;
+  }
+
+  .panel {
+    gap: 8px;
+    padding: 10px;
+  }
+
+  label {
+    letter-spacing: 0.1em;
+  }
+
+  textarea {
+    min-height: 260px;
+    padding: 12px;
+    font-size: 12px;
+  }
+
+  .canvas-shell {
+    min-height: 240px;
+  }
 }
