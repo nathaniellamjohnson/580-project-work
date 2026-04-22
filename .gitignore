@@ -11,6 +11,9 @@ ray_tracer
 *.exe
 grading
 
+*.obj
+ray_tracer.exe
+
 # Scons stuff
 .sconsign.dblite
 config.log
