@@ -2,6 +2,8 @@
 size 640 480
 recursion_depth_limit 10
 enable_shadows 1
+enable_caustics 1
+photon_mapping_params 80000 240 0.06  # photons_per_light max_photons_gathered gather_radius
 spp 64
 
 ### Color Definitions ###
@@ -9,7 +11,7 @@ color red 0.75 0.1 0.1
 color green 0.1 0.75 0.1
 color blue 0.1 0.1 0.75
 color white 0.75 0.75 0.75
-color light_color 1 1 1
+color light_color 10.0 10.0 10.0
 color grey 0.5 0.5 0.5
 color glass_tint 0.9 0.9 1.0
 
@@ -53,7 +55,7 @@ sphere 0.3 -0.7 0.2 0.3 glass_sphere
 
 ### Lighting ###
 # Point light placed near the ceiling
-# point_light 0 0.9 0 light_color 10.5
+point_light 0 0.9 0 light_color 10.5
 ambient_light white 0.05
 
 ### Camera ###

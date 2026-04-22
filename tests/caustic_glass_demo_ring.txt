@@ -1,0 +1,80 @@
+### ---------------------------------------------------------------------- ###
+### Caustic Glass Demo (Ring Variant)
+###
+### This file is meant to be a strong default starting point for generating
+### Cornell-box style scenes with a single glass object and a visible caustic.
+###
+### Scene authoring notes:
+### - Use `plane` for box walls and large flat emitters.
+### - Use `sphere` for compact objects that create reflections/refractions.
+### - Use `phong_shader` for diffuse surfaces.
+### - Use `reflective_shader` for mirrors.
+### - Use `glass_shader` for transmissive objects.
+### - Use `flat_shader` with emissive=1 for light sources.
+### - `photon_mapping_params` controls caustic quality:
+###     photons_per_light max_photons_gathered gather_radius
+### - The current renderer emits caustic photons from point lights.
+### - To change the mood of a scene, move the camera first, then adjust lights.
+### ---------------------------------------------------------------------- ###
+
+### Global Settings ###
+size 640 480
+recursion_depth_limit 10
+enable_shadows 1
+enable_caustics 1
+photon_mapping_params 140000 420 0.05  # photons_per_light max_photons_gathered gather_radius
+spp 10000
+
+### Color Definitions ###
+color red 0.75 0.1 0.1
+color green 0.1 0.75 0.1
+color white 0.75 0.75 0.75
+color blue 0.1 0.1 0.75
+color light_color 11.0 11.0 11.0
+color grey 0.7 0.7 0.7
+color glass_tint 0.92 0.96 1.0
+
+### Shaders ###
+# Cornell wall materials
+phong_shader red_wall red red white 10
+phong_shader green_wall green green white 10
+phong_shader white_wall white white white 10
+phong_shader blue_wall blue blue white 10
+
+# Floor is diffuse so the caustic footprint is visible on it
+phong_shader floor_mat grey grey white 8
+
+# Single glass object for the caustic experiment
+glass_shader glass_ball glass_tint 1.5
+
+# Emissive sphere near the ceiling for Monte Carlo sampling
+flat_shader light_sphere light_color 1
+
+### Geometry: Cornell Box ###
+plane -1 0 0 1 0 0 red_wall
+plane 1 0 0 -1 0 0 green_wall
+plane 0 -1 0 0 1 0 floor_mat
+plane 0 1 0 0 -1 0 white_wall
+plane 0 0 -4 0 0 1 blue_wall
+
+### Geometry: Inner Objects ###
+# Keep the glass sphere in the same general distance band as the ball-of-light
+# scene so the caustic ring lands in a familiar region of the floor.
+# x, y, z
+sphere -0.45 -0.1 0.0 0.28 glass_ball
+sphere 0.00 -0.3 0.0 0.28 glass_ball
+sphere 0.45 -0.62 0.00 0.28 glass_ball
+
+# Emissive light source above the object, centered like the ball-of-light setup.
+sphere 0 0.82 0 0.12 light_sphere
+
+### Lighting ###
+# This point light is the main caustic photon source in the current renderer.
+# Moving it sideways helps break symmetry and encourages a ring-like footprint.
+point_light 0.25 0.86 -0.12 white 12
+ambient_light white 0.04
+
+### Camera ###
+# Similar distance to the ball-of-light scene, but shifted slightly to frame
+# the single glass object and leave room for the caustic pattern on the floor.
+camera 0 0 3.5 0 -0.15 0 0 1 0 45
