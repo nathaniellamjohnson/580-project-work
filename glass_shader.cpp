@@ -103,7 +103,7 @@ BSDF_Sample Glass_Shader::Sample(const vec3& normal, const vec3& wo, std::mt1993
     float tint = 0.05;
 
     float iorRatio = n1/n2;
-    float temp = 1 - pow(iorRatio,2) * pow(dot(-norm,ray_dir),2);
+    float temp = 1 - pow(iorRatio,2) * (1 - pow(dot(-norm,ray_dir),2));
     
     if (random_val > 1-tint){
         // copied from flat_shader.cpp
