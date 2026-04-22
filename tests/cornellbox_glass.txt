@@ -49,7 +49,7 @@ sphere -0.4 -0.6 -0.3 0.4 mirror
 # Small glass sphere on the right
 sphere 0.3 -0.7 0.2 0.3 glass_sphere
 # White light sphere near the ceiling
-# sphere 0 0.82 0 0.12 light_sphere
+sphere 0 0.82 0 0.12 light_sphere
 
 ### Lighting ###
 # Point light placed near the ceiling

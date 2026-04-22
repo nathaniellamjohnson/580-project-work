@@ -29,6 +29,7 @@ em++ -std=c++11 -O3 \
   "$root_dir/mesh.cpp" \
   "$root_dir/glass_shader.cpp" \
   "$root_dir/caustic_map.cpp" \
+  "$root_dir/BRDF_shader.cpp" \
   -o "$output_dir/ray_tracer.js"
 
 echo "WASM build complete: $output_dir/ray_tracer.js"

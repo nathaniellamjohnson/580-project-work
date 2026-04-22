@@ -7,6 +7,7 @@
 #include "plane.h"
 #include "point_light.h"
 #include "reflective_shader.h"
+#include "BRDF_shader.h"
 #include "glass_shader.h"
 #include "render_world.h"
 #include "sphere.h"
@@ -131,6 +132,14 @@ void Parse(Render_World& world,int& width,int& height,const char* test_file)
             assert(c1!=colors.end());
             assert(c2!=colors.end());
             shaders[name]=new Phong_Shader(world,c0->second,c1->second,c2->second,f0);
+        }
+        else if(item=="brdf_shader")
+        {
+            ss >> name >> s0 >> f0;
+            assert(ss);
+            std::map<std::string,vec3>::const_iterator c0 = colors.find(s0);
+            assert(c0 != colors.end());
+            shaders[name] = new BRDF_Shader(world, c0->second, f0);
         }
         else if(item=="reflective_shader")
         {

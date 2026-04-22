@@ -4,7 +4,7 @@ recursion_depth_limit 8
 enable_shadows 1
 enable_caustics 1 
 photon_mapping_params 100000 280 0.06  # photons_per_light max_photons_gathered gather_radius
-spp 8000 # need to test with mosaic
+spp 64 # need to test with mosaic
 
 ### Color Definitions ###
 color red 0.75 0.1 0.1
