@@ -5,7 +5,7 @@ const statusSpinner = document.getElementById('status-spinner');
 const canvas = document.getElementById('output-canvas');
 const canvasContext = canvas.getContext('2d');
 
-const defaultScenePath = '../tests/wasm_default_cornell_scene.txt';
+const defaultScenePath = '/tests/wasm_default_cornell_scene.txt';
 const sceneFilePath = '/scene.txt';
 
 let moduleInstance = null;
@@ -124,7 +124,7 @@ renderButton.addEventListener('click', () => {
 loadDefaultScene();
 
 RayTracerModule({
-  locateFile: (path) => path,
+  locateFile: (path) => `/wasm/${path}`,
 }).then((instance) => {
   moduleInstance = instance;
   setStatus('WASM module loaded. Click Render.');
