@@ -1,0 +1,39 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Monte Carlo Path Tracer & Photon Mapping WASM Demo</title>
+  <link rel="stylesheet" href="./style.css" />
+</head>
+<body>
+  <header class="topbar">
+    <div>
+      <h1>Monte Carlo Path Tracer & Photon Mapping WASM Demo</h1>
+      <p>Edit the scene on the left and render it in the browser on the right. Made by <a href="https://www.nathaniellamjohnson.com/"> Nathaniel Lam Johnson</a>, Conner Nguyen, and Christian Perez.</p>
+    </div>
+    <button id="render-btn" type="button">Render</button>
+  </header>
+
+  <main class="layout">
+    <section class="panel editor-panel">
+      <label for="scene-input">Scene</label>
+      <textarea id="scene-input" spellcheck="false"></textarea>
+      <div id="status" class="status">
+        <span id="status-spinner" class="spinner hidden" aria-hidden="true"></span>
+        <span id="status-text">Loading wasm module...</span>
+      </div>
+    </section>
+
+    <section class="panel output-panel">
+      <label for="output-canvas">Rendered Output</label>
+      <div class="canvas-shell">
+        <canvas id="output-canvas"></canvas>
+      </div>
+    </section>
+  </main>
+
+  <script src="./ray_tracer.js"></script>
+  <script src="./app.js"></script>
+</body>
+</html>
