@@ -84,9 +84,19 @@ void Render_World::Render()
         Build_Caustic_Photon_Map(this->photons_per_light);
     }
 
-    for(int j=0;j<camera.number_pixels[1];j++)
-        for(int i=0;i<camera.number_pixels[0];i++)
-            Render_Pixel(ivec2(i,j));
+    const int width  = camera.number_pixels[0];
+    const int height = camera.number_pixels[1];
+
+    std::vector<int> pixel_indices(width * height);
+    std::iota(pixel_indices.begin(), pixel_indices.end(), 0);
+
+    std::for_each(std::execution::par, pixel_indices.begin(), pixel_indices.end(),
+        [this, width](int idx)
+        {
+            const int i = idx % width;
+            const int j = idx / width;
+            Render_Pixel(ivec2(i, j));
+        });
 }
 
 // cast ray and return the color of the closest intersected surface point,

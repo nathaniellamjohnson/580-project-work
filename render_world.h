@@ -3,6 +3,17 @@
 
 #include <vector>
 #include <random>
+
+#if defined(__APPLE__)
+#define PSTLD_HEADER_ONLY
+#define PSTLD_HACK_INTO_STD
+#include "pstld.h"
+#else
+#include <algorithm>
+#include <execution>
+#endif
+
+
 #include <algorithm>
 #include "camera.h"
 #include "hierarchy.h"

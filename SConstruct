@@ -1,7 +1,7 @@
 import os
 env = Environment(ENV = os.environ)
 
-env.Append(CXXFLAGS=["-std=c++11","-g","-Wall","-O3"])
+env.Append(CXXFLAGS=["-std=c++17","-g","-Wall","-O3"])
 env.Append(LINKFLAGS=["-L/usr/local/lib"])
 
 env.Program("ray_tracer",
